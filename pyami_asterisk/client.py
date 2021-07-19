@@ -112,6 +112,9 @@ class AMIClient:
                 if "Event: Shutdown".encode() in data:
                     self.log.warning("Asterisk is shutdown or restarted")
                     await self._connection_lost()
+                data = data.decode()
+                data = data.replace('\n--END COMMAND--','').replace('B00L00:', 'B00L00: ')
+                data = data.encode()
                 if "ActionID".encode() in data:
                     if _convert_bytes_to_dict(data)['ActionID'] in self._dq:
                         self._dq.pop()
